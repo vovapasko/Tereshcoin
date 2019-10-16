@@ -1,0 +1,309 @@
+{
+    "timestamp": 1569515521.3878982,
+    "nonce": 5,
+    "previous_block": "0",
+    "target": "0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+    "merkleRoot": "717157b98b70d26f07d7a5e27aba0351fe92ef29e5ac48ecdd20ea93cf108b89",
+    "transactions": [
+        {
+            "amount": 36.03860139620544,
+            "when": 1569515521.385904,
+            "moneyWho": "A0",
+            "moneyFrom": "B0"
+        },
+        {
+            "amount": 28.93560777950382,
+            "when": 1569515521.385904,
+            "moneyWho": "A1",
+            "moneyFrom": "B1"
+        },
+        {
+            "amount": 22.64138740345697,
+            "when": 1569515521.385904,
+            "moneyWho": "A2",
+            "moneyFrom": "B2"
+        },
+        {
+            "amount": 7.72969794803251,
+            "when": 1569515521.385904,
+            "moneyWho": "A3",
+            "moneyFrom": "B3"
+        },
+        {
+            "amount": 23.986692071815646,
+            "when": 1569515521.385904,
+            "moneyWho": "A4",
+            "moneyFrom": "B4"
+        },
+        {
+            "amount": 48.58002902397486,
+            "when": 1569515521.385904,
+            "moneyWho": "A5",
+            "moneyFrom": "B5"
+        },
+        {
+            "amount": 7.665741539324372,
+            "when": 1569515521.385904,
+            "moneyWho": "A6",
+            "moneyFrom": "B6"
+        },
+        {
+            "amount": 31.98089387237267,
+            "when": 1569515521.385904,
+            "moneyWho": "A7",
+            "moneyFrom": "B7"
+        },
+        {
+            "amount": 38.11443024099256,
+            "when": 1569515521.385904,
+            "moneyWho": "A8",
+            "moneyFrom": "B8"
+        },
+        {
+            "amount": 17.8284011379925,
+            "when": 1569515521.385904,
+            "moneyWho": "A9",
+            "moneyFrom": "B9"
+        },
+        {
+            "amount": 3.570936690820159,
+            "when": 1569515521.385904,
+            "moneyWho": "A10",
+            "moneyFrom": "B10"
+        },
+        {
+            "amount": 9.93618917130078,
+            "when": 1569515521.385904,
+            "moneyWho": "A11",
+            "moneyFrom": "B11"
+        },
+        {
+            "amount": 10.157788328191625,
+            "when": 1569515521.385904,
+            "moneyWho": "A12",
+            "moneyFrom": "B12"
+        },
+        {
+            "amount": 6.441050366422934,
+            "when": 1569515521.385904,
+            "moneyWho": "A13",
+            "moneyFrom": "B13"
+        },
+        {
+            "amount": 18.632255198443655,
+            "when": 1569515521.385904,
+            "moneyWho": "A14",
+            "moneyFrom": "B14"
+        },
+        {
+            "amount": 44.782160465428326,
+            "when": 1569515521.385904,
+            "moneyWho": "A15",
+            "moneyFrom": "B15"
+        },
+        {
+            "amount": 12.705944205695408,
+            "when": 1569515521.385904,
+            "moneyWho": "A16",
+            "moneyFrom": "B16"
+        },
+        {
+            "amount": 32.122323284345725,
+            "when": 1569515521.385904,
+            "moneyWho": "A17",
+            "moneyFrom": "B17"
+        },
+        {
+            "amount": 28.960690274658223,
+            "when": 1569515521.385904,
+            "moneyWho": "A18",
+            "moneyFrom": "B18"
+        },
+        {
+            "amount": 20.985501810099557,
+            "when": 1569515521.385904,
+            "moneyWho": "A19",
+            "moneyFrom": "B19"
+        },
+        {
+            "amount": 12.313040118421792,
+            "when": 1569515521.385904,
+            "moneyWho": "A20",
+            "moneyFrom": "B20"
+        },
+        {
+            "amount": 48.91762536300448,
+            "when": 1569515521.385904,
+            "moneyWho": "A21",
+            "moneyFrom": "B21"
+        },
+        {
+            "amount": 19.06277050915362,
+            "when": 1569515521.385904,
+            "moneyWho": "A22",
+            "moneyFrom": "B22"
+        },
+        {
+            "amount": 14.057303734877118,
+            "when": 1569515521.385904,
+            "moneyWho": "A23",
+            "moneyFrom": "B23"
+        },
+        {
+            "amount": 7.363888714040928,
+            "when": 1569515521.385904,
+            "moneyWho": "A24",
+            "moneyFrom": "B24"
+        },
+        {
+            "amount": 8.616804964562775,
+            "when": 1569515521.385904,
+            "moneyWho": "A25",
+            "moneyFrom": "B25"
+        },
+        {
+            "amount": 1.212280497287016,
+            "when": 1569515521.385904,
+            "moneyWho": "A26",
+            "moneyFrom": "B26"
+        },
+        {
+            "amount": 37.620378007568675,
+            "when": 1569515521.385904,
+            "moneyWho": "A27",
+            "moneyFrom": "B27"
+        },
+        {
+            "amount": 41.757484139668655,
+            "when": 1569515521.385904,
+            "moneyWho": "A28",
+            "moneyFrom": "B28"
+        },
+        {
+            "amount": 0.8303992856236342,
+            "when": 1569515521.385904,
+            "moneyWho": "A29",
+            "moneyFrom": "B29"
+        },
+        {
+            "amount": 28.142557577652877,
+            "when": 1569515521.385904,
+            "moneyWho": "A30",
+            "moneyFrom": "B30"
+        },
+        {
+            "amount": 46.362131055680784,
+            "when": 1569515521.385904,
+            "moneyWho": "A31",
+            "moneyFrom": "B31"
+        },
+        {
+            "amount": 17.567228110487076,
+            "when": 1569515521.385904,
+            "moneyWho": "A32",
+            "moneyFrom": "B32"
+        },
+        {
+            "amount": 4.64256182541079,
+            "when": 1569515521.385904,
+            "moneyWho": "A33",
+            "moneyFrom": "B33"
+        },
+        {
+            "amount": 26.972237157440237,
+            "when": 1569515521.385904,
+            "moneyWho": "A34",
+            "moneyFrom": "B34"
+        },
+        {
+            "amount": 41.105045980180535,
+            "when": 1569515521.385904,
+            "moneyWho": "A35",
+            "moneyFrom": "B35"
+        },
+        {
+            "amount": 48.894325251071876,
+            "when": 1569515521.385904,
+            "moneyWho": "A36",
+            "moneyFrom": "B36"
+        },
+        {
+            "amount": 48.61109959275188,
+            "when": 1569515521.3868983,
+            "moneyWho": "A37",
+            "moneyFrom": "B37"
+        },
+        {
+            "amount": 26.96279883787433,
+            "when": 1569515521.3868983,
+            "moneyWho": "A38",
+            "moneyFrom": "B38"
+        },
+        {
+            "amount": 28.229394163442834,
+            "when": 1569515521.3868983,
+            "moneyWho": "A39",
+            "moneyFrom": "B39"
+        },
+        {
+            "amount": 5.904673499949858,
+            "when": 1569515521.3868983,
+            "moneyWho": "A40",
+            "moneyFrom": "B40"
+        },
+        {
+            "amount": 27.73934417884018,
+            "when": 1569515521.3868983,
+            "moneyWho": "A41",
+            "moneyFrom": "B41"
+        },
+        {
+            "amount": 26.248417408578483,
+            "when": 1569515521.3868983,
+            "moneyWho": "A42",
+            "moneyFrom": "B42"
+        },
+        {
+            "amount": 37.62435579103022,
+            "when": 1569515521.3868983,
+            "moneyWho": "A43",
+            "moneyFrom": "B43"
+        },
+        {
+            "amount": 1.5723618251371196,
+            "when": 1569515521.3868983,
+            "moneyWho": "A44",
+            "moneyFrom": "B44"
+        },
+        {
+            "amount": 25.51346971522353,
+            "when": 1569515521.3868983,
+            "moneyWho": "A45",
+            "moneyFrom": "B45"
+        },
+        {
+            "amount": 25.007781977029346,
+            "when": 1569515521.3868983,
+            "moneyWho": "A46",
+            "moneyFrom": "B46"
+        },
+        {
+            "amount": 27.868491670457658,
+            "when": 1569515521.3868983,
+            "moneyWho": "A47",
+            "moneyFrom": "B47"
+        },
+        {
+            "amount": 0.33374569551636313,
+            "when": 1569515521.3868983,
+            "moneyWho": "A48",
+            "moneyFrom": "B48"
+        },
+        {
+            "amount": 5.982441934550497,
+            "when": 1569515521.3868983,
+            "moneyWho": "A49",
+            "moneyFrom": "B49"
+        }
+    ]
+}
