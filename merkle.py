@@ -36,10 +36,10 @@ class MerkleTree:
         if len(nodes) == 0:
             return self.getRootElement(roots, [])
         if len(nodes) == 1:
-            roots.append(MerkleNode(nodes[0].__hash__(), nodes[0].__hash__()))
+            roots.append(MerkleNode(nodes[0], nodes[0]))
             return self.getRootElement(roots, [])
         else:
-            roots.append(MerkleNode(nodes[0].__hash__(), nodes[1].__hash__()))
+            roots.append(MerkleNode(nodes[0], nodes[1]))
             new_nodes = nodes[2:]
             return self.getRootElement(new_nodes, roots)
 
@@ -47,23 +47,25 @@ class MerkleTree:
         root = self.getRootElement(self.nodes, [])
         return root
 
-    # def printTree(self):
-    #     root = self.getCHildTree(self.root)
-    #
-
-    def getCHildTree(self, root):
-        left = root.getLeftChild()
-        right = root.getRightChild()
-        pass
+    def printTree(self, root):
+        new_root = root
+        left = new_root.getLeftChild()
+        right = new_root.getRightChild()
+        print(f"Root - {new_root}. It's hash - {new_root.__hash__()}")
+        print(f"Right - {right}. It's hash - {right.__hash__()}")
+        print(f"Left - {left}. It's hash - {left.__hash__()}")
+        print("---------------")
+        if isinstance(left, str) and isinstance(right, str):
+            return
+        self.printTree(left)
+        self.printTree(right)
 
 
 class MerkleNode:
     def __init__(self, leftChild, rightChild):
         self.leftChildHash = leftChild
         self.rightChildHash = rightChild
-
-    def getRoot(self):
-        return get_hash(self.leftChildHash + self.rightChildHash)
+        self.my_hash = self.__hash__()
 
     def getLeftChild(self):
         return self.leftChildHash
@@ -75,7 +77,10 @@ class MerkleNode:
         return self.__hash__() == other.__hash__()
 
     def __hash__(self):
-        return get_hash(self.leftChildHash + self.rightChildHash)
+        if isinstance(self.leftChildHash, str) and isinstance(self.rightChildHash, str):
+            return get_hash(self.leftChildHash + self.rightChildHash)
+        else:
+            return get_hash(self.leftChildHash.my_hash + self.rightChildHash.my_hash)
 
 
 class Transaction:
@@ -105,21 +110,12 @@ class TransactionEncoder(JSONEncoder):
         return json.JSONEncoder.default(self, o)
 
 
-trx1 = Transaction('14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1',
-                   '225e2708d54a4e8e0bfe2393dc2c28a32f2b3dd355706afb49363de7ddbf4c58',
-                   1569761836.1613867,
-                   150)
-trx2 = Transaction('14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1',
-                   '150653f51df5e2aa0bda45b6f68ab4fd2c9c5620042baf6124bf5af302780115',
-                   1569761836.1613867,
-                   150)
-trx3 = Transaction('14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1',
-                   'ec4006a60556d0f521847f487c4e0c57ee1a84982aa64a4fac2837fc71356d51',
-                   1569761836.1613867,
-                   150)
-trx_list = [trx1, trx2, trx3]
+trx_list = []
+for i in range(50):
+    trx = Transaction("B" + str(i), "A" + str(i), time.time(), random.random() * 50)
+    trx_list.append(trx)
 tree = MerkleTree(trx_list)
 root = tree.getRoot()
 left = root.getLeftChild()
 right = root.getRightChild()
-no_child = left.getLeftChild()
+tree.printTree(root)
