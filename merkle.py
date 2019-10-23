@@ -28,7 +28,7 @@ class MerkleTree:
                     self.nodes.append(MerkleNode(self.transactions[i].__hash__(), self.transactions[i + 1].__hash__()))
 
     def getRootHash(self):
-        return get_hash(self.root.leftChildHash + self.root.rightChildHash)
+        return self.root.my_hash
 
     def getRootElement(self, nodes, roots):
         if len(roots) == 1 and len(nodes) == 0:
@@ -59,6 +59,10 @@ class MerkleTree:
             return
         self.printTree(left)
         self.printTree(right)
+
+    def hasTransaction(self, id_transaction_to_check):
+
+        return False
 
 
 class MerkleNode:
@@ -108,14 +112,3 @@ class TransactionEncoder(JSONEncoder):
         if isinstance(o, Transaction):
             return o.__dict__
         return json.JSONEncoder.default(self, o)
-
-
-trx_list = []
-for i in range(50):
-    trx = Transaction("B" + str(i), "A" + str(i), time.time(), random.random() * 50)
-    trx_list.append(trx)
-tree = MerkleTree(trx_list)
-root = tree.getRoot()
-left = root.getLeftChild()
-right = root.getRightChild()
-tree.printTree(root)

@@ -26,22 +26,8 @@ class Node:
         return self.address
 
     def getChainData(self):
-        file = open(self.chain_file, mode="r")
-        str = file.read()
-        chain = []
-        jsons = str.split("}{")
-        if len(jsons) == 1:
-            jso = json.loads(jsons[0])
-            chain.append(jso)
-            return chain
-        for i in range(len(jsons)):
-            if i == 0:
-                jsons[i] += "}"
-            elif i < len(jsons) - 1:
-                jsons[i] = "{" + jsons[i] + "}"
-            else:
-                jsons[i] = "{" + jsons[i]
-            chain.append(json.loads(jsons[i]))
+        with open(filename) as f:
+            chain = json.load(f)
         return chain
 
     def send_coins(self, addressTo, amountCoins):
@@ -63,8 +49,3 @@ class Node:
                 if transaction['moneyFrom'] == self.address:
                     money_out += transaction['amount']
         return money_in - money_out
-
-#
-# n = Node("B0")
-# balance = n.get_balance()
-# print(balance)

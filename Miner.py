@@ -4,6 +4,7 @@ import socket
 import time
 import json
 import os
+from pathlib import Path
 
 import credentials
 from Block import Block
@@ -17,10 +18,23 @@ def lessThanTarget(hash, target):
 
 
 def writeToChain(block):
+    """
+    This function gets the data from the block, converts it to json and save in chain(file) as the list pf jsons
+    """
     # convert to json block in dict form, and in order to serialize Transaction class use TransactionEncoder
+    exists = Path(filename).exists()
     with open(filename, mode="a") as file:
         new_json = json.dumps(block.__dict__, cls=TransactionEncoder, indent=4)
+        if not exists:  # means that file doesn't exist and the symbol of the beginning of list should be written
+            file.write('[')
+        else:
+            # next two lines delete the last symbol in file. It's made for further correct formatting of json
+            file.seek(0, os.SEEK_END)
+            file.seek(file.tell() - 1, os.SEEK_SET)
+            file.truncate()
+            file.write(',\n')
         file.write(new_json)
+        file.write(']')
 
 
 def mine(block):
@@ -49,37 +63,13 @@ def mine(block):
 filename = credentials.filename
 trx_in_block = 3
 trx_list = []
-# for i in range(trx_in_block):
-#     trx = Transaction("B" + str(i), "A" + str(i), time.time(), random.random() * 50)
-#     trx_list.append(trx)
-# tree = MerkleTree(trx_list)
-# tree.createNodes()
-# root = tree.getRootHash()
-
-# genesis_block = Block("0", root, trx_list)
-#
-# mine(genesis_block)
 amountNodes = 5
 
 
 def get_previous_hash(filename):
     # means it was no previous block in chain
-    file = open(filename, mode="r")
-    str = file.read()
-    chain = []
-    jsons = str.split("}{")
-    if len(jsons) == 1:
-        jso = json.loads(jsons[0])
-        chain.append(jso)
-        return chain[0]["block_hash"]
-    for i in range(len(jsons)):
-        if i == 0:
-            jsons[i] += "}"
-        elif i < len(jsons) - 1:
-            jsons[i] = "{" + jsons[i] + "}"
-        else:
-            jsons[i] = "{" + jsons[i]
-        chain.append(json.loads(jsons[i]))
+    with open(filename) as f:
+        chain = json.load(f)
     return chain[-1]["block_hash"]
 
 

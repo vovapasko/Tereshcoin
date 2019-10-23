@@ -1,1 +1,1 @@
-filename = "data/chain.txt"
+filename = "data/new_chain.txt"
