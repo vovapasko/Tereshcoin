@@ -2,7 +2,7 @@ import json
 
 # from Node import Node
 # from merkle import get_hash, Transaction, MerkleTree
-from Node import Node
+from Node.Node import Node
 from merkle import get_hash
 
 address = get_hash("Vova")
