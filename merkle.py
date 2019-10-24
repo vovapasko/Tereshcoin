@@ -60,16 +60,43 @@ class MerkleTree:
         self.printTree(left)
         self.printTree(right)
 
+    def prove(self, root, searched_hash, proof):
+        if searched_hash == self.root.my_hash:
+            return proof
+        left_child = root.getLeftChild()
+        right_child = root.getRightChild()
+        if isinstance(left_child, str) and isinstance(right_child, str):  # means that it is the leaf of Merkle Tree
+            # todo try to replace the repeating code
+            if left_child == searched_hash:
+                new_searched_node = MerkleNode(searched_hash, right_child)
+                proof.append(right_child)
+                return self.prove(self.root, new_searched_node.my_hash, proof)
+            if right_child == searched_hash:
+                new_searched_node = MerkleNode(left_child, searched_hash)
+                proof.append(left_child)
+                return self.prove(self.root, new_searched_node.my_hash, proof)
+            return
+        if left_child.my_hash == searched_hash:
+            new_searched_node = MerkleNode(searched_hash, right_child.my_hash)
+            proof.append(right_child.my_hash)
+            return self.prove(self.root, new_searched_node.my_hash, proof)
+        if right_child.my_hash == searched_hash:
+            new_searched_node = MerkleNode(left_child.my_hash, searched_hash)
+            proof.append(left_child.my_hash)
+            return self.prove(self.root, new_searched_node.my_hash, proof)
+        self.prove(left_child, searched_hash, proof)
+        self.prove(right_child, searched_hash, proof)
+        return proof
+
     def proveTransaction(self, trx_hash):
         """
         :param trx_hash: hash of transaction, presence of which should be proved
         :return: dataset of needed transactions for reproducing Merkle tree and the hash of block if this transaction
-        belongs to tree and exists in chain. Otherwise returns False
+        belongs to tree and exists in chain. Otherwise returns empty list.
         """
-        trx_node = self.getNodeWithTransaction(trx_hash)
-        # if trx_node:
-
-        return False
+        proof = []
+        proof = self.prove(self.root, trx_hash, proof)
+        return proof
 
     def getNodeWithTransaction(self, trx_hash):
         for node in self.nodes:
