@@ -6,7 +6,7 @@ from _datetime import datetime
 import json
 
 from credentials import filename
-from merkle import Transaction
+from merkle import Transaction, get_hash
 
 
 class Node:
@@ -49,3 +49,18 @@ class Node:
                 if transaction['moneyFrom'] == self.address:
                     money_out += transaction['amount']
         return money_in - money_out
+
+    def checkProof(self, trx_to_check, proof, block_hash):
+        for block in self.chain_data:
+            if block['block_hash'] == block_hash:
+                my_block = block
+        real_root = my_block['merkleRoot']
+        root_from_proof = self.get_root(trx_to_check, proof)
+        return real_root == root_from_proof
+
+
+    def get_root(self, node_hash, proof):
+        if len(proof) == 0:
+            return node_hash
+        new_hash = get_hash(node_hash + proof[0])
+        return self.get_root(new_hash, proof[1:])
