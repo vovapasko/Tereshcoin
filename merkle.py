@@ -60,8 +60,21 @@ class MerkleTree:
         self.printTree(left)
         self.printTree(right)
 
-    def hasTransaction(self, id_transaction_to_check):
+    def proveTransaction(self, trx_hash):
+        """
+        :param trx_hash: hash of transaction, presence of which should be proved
+        :return: dataset of needed transactions for reproducing Merkle tree and the hash of block if this transaction
+        belongs to tree and exists in chain. Otherwise returns False
+        """
+        trx_node = self.getNodeWithTransaction(trx_hash)
+        # if trx_node:
 
+        return False
+
+    def getNodeWithTransaction(self, trx_hash):
+        for node in self.nodes:
+            if node.getLeftChild() == trx_hash or node.getRightChild() == trx_hash:
+                return node
         return False
 
 
