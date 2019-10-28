@@ -155,6 +155,10 @@ class TransactionEncoder(JSONEncoder):
 
 
 # str2 = '2f6806993fe7e7fe6d6048007e2d7d88b9ee21aad1bab6ee874886dc6a84c8d6' + '03bfcf8a24f2854983ea54ce45e48756a6d5f276bff0354b18109aa4b026b3eb'
+# str3 = '03bfcf8a24f2854983ea54ce45e48756a6d5f276bff0354b18109aa4b026b3eb' + '2f6806993fe7e7fe6d6048007e2d7d88b9ee21aad1bab6ee874886dc6a84c8d6'
 # print(str2)
-# res = get_hash(str2)
-# print(res)
+# res2 = get_hash(str2)
+# print(res2)
+# print("-------------")
+# print(str3)
+# print(get_hash(str3))
