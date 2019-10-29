@@ -5,7 +5,7 @@ import time
 from _datetime import datetime
 import json
 
-from credentials import filename
+from Node_dir.node_credentials import filename
 from merkle import Transaction, get_hash
 
 
@@ -58,9 +58,26 @@ class Node:
         root_from_proof = self.get_root(trx_to_check, proof)
         return real_root == root_from_proof
 
-
     def get_root(self, node_hash, proof):
         if len(proof) == 0:
             return node_hash
         new_hash = get_hash(node_hash + proof[0])
         return self.get_root(new_hash, proof[1:])
+
+    def listen_miner(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind((self.hostname, self.port))
+        s.listen()
+        minerSocket, minerAddress = s.accept()
+        print(f"Data from {minerAddress} has been received.")
+        new_msg = minerSocket.recv(1024)
+        new_block = pickle.loads(new_msg)
+        s.close()
+
+
+if __name__ == '__main__':
+    nodeV = Node(get_hash("Vova"))
+    print(nodeV.get_balance())
+    addressTo = get_hash("Paul")
+    nodeV.send_coins(addressTo, 20)
+    nodeV.listen_miner()

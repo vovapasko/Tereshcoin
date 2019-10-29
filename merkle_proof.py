@@ -1,7 +1,7 @@
 import json
 
 import credentials
-from Node.Node import Node
+from Node_dir.Node import Node
 from merkle import get_hash, Transaction, MerkleTree
 
 with open(credentials.filename) as f:

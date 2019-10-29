@@ -7,7 +7,7 @@ import os
 from pathlib import Path
 
 from Block import Block
-from Miner import miner_credentials
+from Miner_dir import miner_credentials
 from merkle import Transaction, MerkleTree, get_hash, TransactionEncoder
 
 
@@ -61,7 +61,7 @@ def mine(block):
 
 
 filename = miner_credentials.filename
-trx_in_block = 3
+trx_in_block = 1
 trx_list = []
 amountNodes = 5
 
