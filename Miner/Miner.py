@@ -6,8 +6,8 @@ import json
 import os
 from pathlib import Path
 
-import credentials
 from Block import Block
+from Miner import miner_credentials
 from merkle import Transaction, MerkleTree, get_hash, TransactionEncoder
 
 
@@ -60,7 +60,7 @@ def mine(block):
     writeToChain(block)
 
 
-filename = credentials.filename
+filename = miner_credentials.filename
 trx_in_block = 3
 trx_list = []
 amountNodes = 5
