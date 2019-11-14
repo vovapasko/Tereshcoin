@@ -16,7 +16,7 @@ class Node:
         self.wallet_address = new_address
         self.node_chain_filename = str(new_address) + ".txt"
         self.chain_data = self.getChainData()
-        self.address = socket.gethostname()
+        self.address = '<broadcast>'
         self.port = 1234
         self.socket = self.initSocket()
 
@@ -24,8 +24,8 @@ class Node:
         udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # DGRAM makes this a UDP socket
         udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        udpSocket.bind((self.address, self.port))
-        udpSocket.settimeout(1)
+        udpSocket.bind(('', self.port))
+        # udpSocket.settimeout(1)
         return udpSocket
 
     @property
@@ -104,5 +104,6 @@ class Node:
     def start(self):
         listen_thread = Thread(target=self.thread_listen, daemon=True)
         listen_thread.start()
-
-        self.send_message_to_nodes()
+        while True:
+            time.sleep(2)
+            self.send_message_to_nodes()
