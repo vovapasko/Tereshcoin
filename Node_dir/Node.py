@@ -37,8 +37,11 @@ class Node:
         return self.wallet_address
 
     def getChainData(self):
-        with open(self.node_chain_filename) as f:
-            chain = json.load(f)
+        try:
+            with open(self.node_chain_filename) as f:
+                chain = json.load(f)
+        except FileNotFoundError:
+            chain = None
         return chain
 
     def send_coins(self, addressTo, amountCoins):
@@ -98,8 +101,8 @@ class Node:
         serialized_message = pickle.dumps(json_message)
         self.socket.sendto(serialized_message, (self.address, self.port))
 
+    def start(self):
+        listen_thread = Thread(target=self.thread_listen, daemon=True)
+        listen_thread.start()
 
-if __name__ == '__main__':
-    node = Node(get_hash("Vova"))
-    listen_thread = Thread(target=node.thread_listen, daemon=True)
-    node.send_message_to_nodes()
+        self.send_message_to_nodes()
