@@ -85,11 +85,13 @@ class Node:
                 data, from_addr = self.socket.recvfrom(BUFFER_SIZE)
                 print(f'Received data from {from_addr}')
                 # check data if it's sent from this same instance
-                with open(self.node_chain_filename, 'a+') as file:
-                    file.write(f'New data from {from_addr}:\n')
-                    file.write(f'{data.decode()}\n')
-                    file.flush()
-                    os.fsync(file.fileno())
+                deserealizedJson = pickle.loads(data)
+                if not deserealizedJson["from"] == self.wallet_address:
+                    with open(self.node_chain_filename, 'a+') as file:
+                        file.write(f'New data from {from_addr}:\n')
+                        file.write(f'{str(deserealizedJson)}\n')
+                        file.flush()
+                        os.fsync(file.fileno())
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
 
