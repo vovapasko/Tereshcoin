@@ -6,8 +6,10 @@ import time
 from _datetime import datetime
 import json
 from concurrent.futures import thread
+from pathlib import Path
 from threading import Thread
 
+import tools
 from merkle import Transaction, get_hash
 from tools import functions
 
@@ -15,7 +17,10 @@ from tools import functions
 class Node:
     def __init__(self, new_address):
         self.wallet_address = new_address
+        self.id = "NODE" + self.wallet_address
         self.node_chain_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "data" + "\\" + str(
+            new_address) + ".txt"
+        self.node_log_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "logs" + "\\" + str(
             new_address) + ".txt"
         self.chain_data = self.getChainData()
         self.address = '<broadcast>'
@@ -40,7 +45,10 @@ class Node:
     def getChainData(self):
         try:
             with open(self.node_chain_filename) as f:
-                chain = json.load(f)
+                try:
+                    chain = json.load(f)
+                except json.decoder.JSONDecodeError:
+                    chain = Node
         except FileNotFoundError:
             chain = None
         return chain
@@ -87,25 +95,42 @@ class Node:
                 # check data if it's sent from this same instance
                 deserealizedJson = pickle.loads(data)
                 message_header = deserealizedJson["header"]
-                message_from = deserealizedJson["from"]
+                message_from = deserealizedJson["_from"]
                 call_func = functions[message_header]
                 res = call_func(message_from=message_from, wallet_address=self.wallet_address,
                                 from_addr=from_addr, deserealizedJson=deserealizedJson,
-                                node_chain_filename=self.node_chain_filename)
+                                node_chain_filename=self.node_chain_filename, node_log_filename=self.node_log_filename)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
 
-    def send_message_to_nodes(self):
-        header = "NODE_MAIN_INFO"
+    def send_me_online(self):
+        header = tools.node_connected_to_network
         _from = self.wallet_address
         message = "I am online!"
-        json_message = {"header": header, "from": _from, "message": message}
+        json_message = self.format_json_message(header=header, _from=_from, message=message)
+        self.send_message_to_nodes(json_message)
+        my_file = Path(self.node_chain_filename)
+        if not my_file.is_file():
+            file = open(self.node_chain_filename, "w")
+            file.close()
+
+    def send_message_to_nodes(self, json_message):
         serialized_message = pickle.dumps(json_message)
         self.socket.sendto(serialized_message, (self.address, self.port))
+
+    def format_json_message(self, **data):
+        new_json_message = {}
+        for key, value in data.items():
+            new_json_message[str(key)] = value
+        return new_json_message
+
+    def synchronise(self):
+        pass
 
     def start(self):
         listen_thread = Thread(target=self.thread_listen, daemon=True)
         listen_thread.start()
-        self.send_message_to_nodes()
+        self.send_me_online()
+        self.synchronise()
         while True:
             time.sleep(2)
