@@ -73,11 +73,3 @@ class Node:
         new_msg = minerSocket.recv(1024)
         new_block = pickle.loads(new_msg)
         s.close()
-
-
-if __name__ == '__main__':
-    nodeV = Node(get_hash("Vova"))
-    print(nodeV.get_balance())
-    addressTo = get_hash("Paul")
-    nodeV.send_coins(addressTo, 20)
-    nodeV.listen_miner()

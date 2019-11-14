@@ -94,6 +94,3 @@ def start():
         if len(trx_list) == trx_in_block:
             create_new_block(trx_list)
 
-
-if __name__ == '__main__':
-    start()
