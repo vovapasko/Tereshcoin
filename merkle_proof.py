@@ -2,7 +2,8 @@ import json
 
 import credentials
 from Node_dir.Node import Node
-from merkle import get_hash, Transaction, MerkleTree
+from merkle import Transaction, MerkleTree
+from tools import get_hash
 
 with open(credentials.filename) as f:
     chain = json.load(f)

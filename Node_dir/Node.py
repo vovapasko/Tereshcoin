@@ -14,7 +14,7 @@ from merkle import Transaction, get_hash
 class Node:
     def __init__(self, new_address):
         self.wallet_address = new_address
-        self.node_chain_filename = str(new_address) + ".txt"
+        self.node_chain_filename = "data/" + str(new_address) + ".txt"
         self.chain_data = self.getChainData()
         self.address = '<broadcast>'
         self.port = 1234
@@ -25,7 +25,6 @@ class Node:
         udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         udpSocket.bind(('', self.port))
-        # udpSocket.settimeout(1)
         return udpSocket
 
     @property
@@ -83,10 +82,10 @@ class Node:
         while True:
             try:
                 data, from_addr = self.socket.recvfrom(BUFFER_SIZE)
-                print(f'Received data from {from_addr}')
                 # check data if it's sent from this same instance
                 deserealizedJson = pickle.loads(data)
                 if not deserealizedJson["from"] == self.wallet_address:
+                    print(f'Received data from {from_addr} ip address and {deserealizedJson["from"]} wallet address')
                     with open(self.node_chain_filename, 'a+') as file:
                         file.write(f'New data from {from_addr}:\n')
                         file.write(f'{str(deserealizedJson)}\n')
