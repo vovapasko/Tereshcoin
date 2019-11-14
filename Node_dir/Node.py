@@ -9,12 +9,14 @@ from concurrent.futures import thread
 from threading import Thread
 
 from merkle import Transaction, get_hash
+from tools import functions
 
 
 class Node:
     def __init__(self, new_address):
         self.wallet_address = new_address
-        self.node_chain_filename = "data/" + str(new_address) + ".txt"
+        self.node_chain_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "data" + "\\" + str(
+            new_address) + ".txt"
         self.chain_data = self.getChainData()
         self.address = '<broadcast>'
         self.port = 1234
@@ -84,13 +86,12 @@ class Node:
                 data, from_addr = self.socket.recvfrom(BUFFER_SIZE)
                 # check data if it's sent from this same instance
                 deserealizedJson = pickle.loads(data)
-                if not deserealizedJson["from"] == self.wallet_address:
-                    print(f'Received data from {from_addr} ip address and {deserealizedJson["from"]} wallet address')
-                    with open(self.node_chain_filename, 'a+') as file:
-                        file.write(f'New data from {from_addr}:\n')
-                        file.write(f'{str(deserealizedJson)}\n')
-                        file.flush()
-                        os.fsync(file.fileno())
+                message_header = deserealizedJson["header"]
+                message_from = deserealizedJson["from"]
+                call_func = functions[message_header]
+                res = call_func(message_from=message_from, wallet_address=self.wallet_address,
+                                from_addr=from_addr, deserealizedJson=deserealizedJson,
+                                node_chain_filename=self.node_chain_filename)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
 
@@ -105,6 +106,6 @@ class Node:
     def start(self):
         listen_thread = Thread(target=self.thread_listen, daemon=True)
         listen_thread.start()
+        self.send_message_to_nodes()
         while True:
             time.sleep(2)
-            self.send_message_to_nodes()
