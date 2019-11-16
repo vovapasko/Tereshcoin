@@ -99,7 +99,8 @@ class Node:
                 call_func = functions[message_header]
                 res = call_func(message_from=message_from, wallet_address=self.wallet_address,
                                 from_addr=from_addr, deserealizedJson=deserealizedJson,
-                                node_chain_filename=self.node_chain_filename, node_log_filename=self.node_log_filename)
+                                node_chain_filename=self.node_chain_filename,
+                                node_log_filename=self.node_log_filename)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
 
