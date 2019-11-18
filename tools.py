@@ -1,4 +1,5 @@
 import hashlib
+import json
 import logging
 import os
 
@@ -11,12 +12,12 @@ def get_hash(string):
 
 def log_new_node(**data):
     if not data['message_from'] == data['wallet_address']:
-        address = data['from_addr']
+        address = data['deserealizedJson']['from_ip_address']
         _from = data['deserealizedJson']["_from"]
         print(f'Received data from {address} ip address and {_from} wallet address')
         with open(data['node_log_filename'], 'a+') as file:
-            file.write(f'New data from {address}:\n')
-            message = data['deserealizedJson']
+            # file.write(f'New data from {address}:\n')
+            message = json.dumps(data['deserealizedJson'])
             file.write(f'{str(message)}\n')
             file.flush()
             os.fsync(file.fileno())

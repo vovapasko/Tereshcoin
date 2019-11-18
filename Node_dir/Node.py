@@ -3,9 +3,8 @@ import pickle
 import socket
 import time
 
-from _datetime import datetime
 import json
-from concurrent.futures import thread
+import traceback
 from pathlib import Path
 from threading import Thread
 
@@ -26,6 +25,7 @@ class Node:
         self.address = '<broadcast>'
         self.port = 1234
         self.socket = self.initSocket()
+        self.log_data = None
 
     def initSocket(self):
         udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # DGRAM makes this a UDP socket
@@ -97,8 +97,10 @@ class Node:
                 message_header = deserealizedJson["header"]
                 message_from = deserealizedJson["_from"]
                 call_func = functions[message_header]
+                deserealizedJson["from_ip_address"] = from_addr
+                deserealizedJson["port_listened"] = self.port
                 res = call_func(message_from=message_from, wallet_address=self.wallet_address,
-                                from_addr=from_addr, deserealizedJson=deserealizedJson,
+                                deserealizedJson=deserealizedJson,
                                 node_chain_filename=self.node_chain_filename,
                                 node_log_filename=self.node_log_filename)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
@@ -128,10 +130,36 @@ class Node:
     def synchronise(self):
         pass
 
+    def get_nodes_online(self):
+        if self.log_data:
+            return len(self.log_data)
+        return 0
+
+    def getLogData(self):
+        try:
+            file = open(self.node_log_filename, "r")
+            data_str = file.read().split("/n")
+            if data_str[0] == '':  # means that there are no data in log file
+                return None
+            json_dict_arr = []
+            for string in data_str:
+                new_json = json.loads(string)
+                json_dict_arr.append(new_json)
+            return json_dict_arr
+        except Exception:
+            print(traceback.print_exc())
+            return None
+
     def start(self):
+        open(self.node_log_filename, "w").close()  # the log file must be empty before node goes online
         listen_thread = Thread(target=self.thread_listen, daemon=True)
         listen_thread.start()
         self.send_me_online()
-        self.synchronise()
         while True:
             time.sleep(2)
+            self.log_data = self.getLogData()
+            print("Node " + self.wallet_address + " is here!")
+            print("Nodes online - " + str(self.get_nodes_online()))
+            print("List of nodes: ")
+            print(self.log_data)
+            print("///////////")
