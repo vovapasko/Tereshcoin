@@ -138,9 +138,10 @@ class Node:
     def getLogData(self):
         try:
             file = open(self.node_log_filename, "r")
-            data_str = file.read().split("/n")
+            data_str = file.read().split("\n")
             if data_str[0] == '':  # means that there are no data in log file
                 return None
+            del data_str[-1]
             json_dict_arr = []
             for string in data_str:
                 new_json = json.loads(string)
