@@ -96,13 +96,24 @@ class Node:
                 deserealizedJson = pickle.loads(data)
                 message_header = deserealizedJson["header"]
                 message_from = deserealizedJson["_from"]
-                call_func = functions[message_header]
+                try:
+                    call_func = functions[message_header]
+                except KeyError:
+                    print("If you get this Exception, you forgot to create key for your function and header")
+                    traceback.print_exc()
                 deserealizedJson["from_ip_address"] = from_addr
                 deserealizedJson["port_listened"] = self.port
                 res = call_func(message_from=message_from, wallet_address=self.wallet_address,
                                 deserealizedJson=deserealizedJson,
                                 node_chain_filename=self.node_chain_filename,
                                 node_log_filename=self.node_log_filename)
+                # todo think how to remaster this spaghetti code
+                if message_header == tools.node_connected_to_network and self.get_nodes_online() != 0:  # means that older node sees a new node and sends back respond
+                    header = tools.from_older_node_id
+                    _from = self.wallet_address
+                    message = "Hello from older node!"
+                    json_message = self.format_json_message(header=header, _from=_from, message=message)
+                    self.send_message_to_nodes(json_message)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
 
@@ -131,6 +142,7 @@ class Node:
         pass
 
     def get_nodes_online(self):
+        self.log_data = self.getLogData()
         if self.log_data:
             return len(self.log_data)
         return 0
