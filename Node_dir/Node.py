@@ -5,6 +5,7 @@ import time
 
 import json
 import traceback
+from datetime import datetime
 from pathlib import Path
 from threading import Thread
 
@@ -26,6 +27,7 @@ class Node:
         self.port = 1234
         self.socket = self.initSocket()
         self.log_data = None
+        self.time_start_online = datetime.now().timestamp()
 
     def initSocket(self):
         udpSocket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # DGRAM makes this a UDP socket
@@ -112,7 +114,8 @@ class Node:
                     header = tools.from_older_node_id
                     _from = self.wallet_address
                     message = "Hello from older node!"
-                    json_message = self.format_json_message(header=header, _from=_from, message=message)
+                    time_online = datetime.now().timestamp() - self.time_start_online
+                    json_message = self.format_json_message(header=header, _from=_from, message=message, time_online=time_online)
                     self.send_message_to_nodes(json_message)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
@@ -121,6 +124,8 @@ class Node:
         header = tools.node_connected_to_network
         _from = self.wallet_address
         message = "I am online!"
+        # time_online = datetime.now().timestamp() - self.time_start_online
+        # json_message = self.format_json_message(header=header, _from=_from, message=message, time_online=time_online)
         json_message = self.format_json_message(header=header, _from=_from, message=message)
         self.send_message_to_nodes(json_message)
         my_file = Path(self.node_chain_filename)
