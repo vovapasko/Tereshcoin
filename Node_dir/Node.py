@@ -105,6 +105,7 @@ class Node:
                     traceback.print_exc()
                 deserealizedJson["from_ip_address"] = from_addr
                 deserealizedJson["port_listened"] = self.port
+                # todo send to this function only node information, message_from and deserialized json message
                 res = call_func(node=self, message_from=message_from, wallet_address=self.wallet_address,
                                 deserealizedJson=deserealizedJson,
                                 node_chain_filename=self.node_chain_filename,
@@ -115,6 +116,7 @@ class Node:
                     _from = self.wallet_address
                     message = "Hello from older node!"
                     time_online = datetime.now().timestamp() - self.time_start_online
+                    # todo send to this function only node information and deserialized json message
                     json_message = self.format_json_message(header=header, _from=_from, message=message,
                                                             time_online=time_online)
                     self.send_message_to_nodes(json_message)
@@ -148,6 +150,7 @@ class Node:
             return len(self.log_data)
         return 0
 
+    # todo import this method from tools
     def getNodeData(self):
         try:
             file = open(self.node_info_filename, "r")

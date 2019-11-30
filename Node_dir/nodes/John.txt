@@ -1,1 +1,0 @@
-{"header": "NODE_FROM_OLD_MESSAGE", "_from": "Petya", "message": "Hello from older node!", "time_online": 5.330040216445923, "from_ip_address": ["192.168.0.105", 1234], "port_listened": 1234}

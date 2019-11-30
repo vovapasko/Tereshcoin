@@ -9,10 +9,11 @@ from_older_node_id = "NODE_FROM_OLD_MESSAGE"
 node_request_data = "NODE_GIVE_ME_DATA"
 
 
+
 def get_hash(string):
     return hashlib.sha256(hashlib.sha256(string.encode("utf-8")).hexdigest().encode('utf-8')).hexdigest()
 
-
+## todo make a refactoring of code here
 def write_new_node(**data):
     if not data['message_from'] == data['wallet_address']:
         address = data['deserealizedJson']['from_ip_address']
@@ -35,7 +36,7 @@ def get_all_addresses(data):
         addr.append(datum['_from'])
     return addr
 
-
+## todo make a refactoring of code here
 def write_old_node(**data):
     log_data = None
     try:
@@ -51,7 +52,7 @@ def write_old_node(**data):
         write_new_node(**data)
     return False
 
-
+# todo make import of this method to Node.get_node_data
 def get_node_data(node_log_filename):
     try:
         file = open(node_log_filename, "r")
