@@ -20,7 +20,7 @@ class Node:
         self.id = "NODE" + self.wallet_address
         self.node_chain_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "data" + "\\" + str(
             new_address) + ".txt"
-        self.node_log_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "logs" + "\\" + str(
+        self.node_info_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "nodes" + "\\" + str(
             new_address) + ".txt"
         self.chain_data = self.getChainData()
         self.address = '<broadcast>'
@@ -108,14 +108,15 @@ class Node:
                 res = call_func(message_from=message_from, wallet_address=self.wallet_address,
                                 deserealizedJson=deserealizedJson,
                                 node_chain_filename=self.node_chain_filename,
-                                node_log_filename=self.node_log_filename)
+                                node_log_filename=self.node_info_filename)
                 # todo think how to remaster this spaghetti code
                 if message_header == tools.node_connected_to_network and self.get_nodes_online() != 0:  # means that older node sees a new node and sends back respond
                     header = tools.from_older_node_id
                     _from = self.wallet_address
                     message = "Hello from older node!"
                     time_online = datetime.now().timestamp() - self.time_start_online
-                    json_message = self.format_json_message(header=header, _from=_from, message=message, time_online=time_online)
+                    json_message = self.format_json_message(header=header, _from=_from, message=message,
+                                                            time_online=time_online)
                     self.send_message_to_nodes(json_message)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
@@ -124,8 +125,6 @@ class Node:
         header = tools.node_connected_to_network
         _from = self.wallet_address
         message = "I am online!"
-        # time_online = datetime.now().timestamp() - self.time_start_online
-        # json_message = self.format_json_message(header=header, _from=_from, message=message, time_online=time_online)
         json_message = self.format_json_message(header=header, _from=_from, message=message)
         self.send_message_to_nodes(json_message)
         my_file = Path(self.node_chain_filename)
@@ -143,9 +142,6 @@ class Node:
             new_json_message[str(key)] = value
         return new_json_message
 
-    def synchronise(self):
-        pass
-
     def get_nodes_online(self):
         self.log_data = self.getLogData()
         if self.log_data:
@@ -154,7 +150,7 @@ class Node:
 
     def getLogData(self):
         try:
-            file = open(self.node_log_filename, "r")
+            file = open(self.node_info_filename, "r")
             data_str = file.read().split("\n")
             if data_str[0] == '':  # means that there are no data in log file
                 return None
@@ -168,11 +164,38 @@ class Node:
             print(traceback.print_exc())
             return None
 
+    def ask_for_data(self):
+        # because writing the data about available nodes to the file could not be finished so we need some pause for it
+        time.sleep(1)
+        nodes_online = self.get_nodes_online()
+        if nodes_online > 0:
+            nodes = self.getLogData()
+            self.send_give_data_message(nodes)
+        else:
+            print("I am alone in this world...")
+        pass
+
+    def send_give_data_message(self, nodes):
+        header = tools.node_request_data
+        _from = self.wallet_address
+        message = "Give me a data"
+
+        pass
+
     def start(self):
-        open(self.node_log_filename, "w").close()  # the log file must be empty before node goes online
+        try:
+            open(self.node_info_filename, "w").close()  # the log file must be empty before node goes online
+        except FileNotFoundError:
+            # means that file with nodes data doesn't exist and we need to create it
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            dir_to_create = dir_path + "\\" + "nodes"
+            os.makedirs(dir_to_create)
+            file = open(self.node_info_filename, "w")
+            file.close()
         listen_thread = Thread(target=self.thread_listen, daemon=True)
         listen_thread.start()
         self.send_me_online()
+        # self.ask_for_data()
         while True:
             time.sleep(2)
             self.log_data = self.getLogData()
