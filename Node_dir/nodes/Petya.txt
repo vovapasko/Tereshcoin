@@ -1,0 +1,2 @@
+{"header": "NODE_FROM_OLD_MESSAGE", "_from": "Vasya", "message": "Hello from older node!", "time_online": 4.142361164093018, "from_ip_address": ["192.168.0.105", 1234], "port_listened": 1234}
+{"header": "NODE_NEW_CONNECTED_MAIN_INFO", "_from": "John", "message": "I am online!", "from_ip_address": ["192.168.0.105", 1234], "port_listened": 1234}
