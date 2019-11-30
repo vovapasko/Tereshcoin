@@ -2,18 +2,26 @@ import hashlib
 import json
 import logging
 import os
+import pickle
 import traceback
 
 node_connected_to_network = "NODE_NEW_CONNECTED_MAIN_INFO"
 from_older_node_id = "NODE_FROM_OLD_MESSAGE"
 node_request_data = "NODE_GIVE_ME_DATA"
+node_send_to_concrete_node_data = "NODE_SEND_DATA_TO_NODE"
 
+
+def format_json_message(**data):
+    new_json_message = {}
+    for key, value in data.items():
+        new_json_message[str(key)] = value
+    return new_json_message
 
 
 def get_hash(string):
     return hashlib.sha256(hashlib.sha256(string.encode("utf-8")).hexdigest().encode('utf-8')).hexdigest()
 
-## todo make a refactoring of code here
+
 def write_new_node(**data):
     node = data["node"]
     wallet_address = node.wallet_address
@@ -39,7 +47,7 @@ def get_all_addresses(data):
         addr.append(datum['_from'])
     return addr
 
-## todo make a refactoring of code here
+
 def write_old_node(**data):
     log_data = None
     node = data["node"]
@@ -57,7 +65,7 @@ def write_old_node(**data):
         write_new_node(**data)
     return False
 
-# todo make import of this method to Node.get_node_data
+
 def get_node_data(node_log_filename):
     try:
         file = open(node_log_filename, "r")
@@ -77,11 +85,31 @@ def get_node_data(node_log_filename):
 
 def handle_data_receiver(**data):
     node = data["node"]
-    json_message = data["message"]
+    node_wallet = node.wallet_address
+    message = data["message"]
+    send_to = message["_from"]
+    if node_wallet != send_to:  # means that address won't send data to itself
+        header = node_send_to_concrete_node_data
+        new_message = "Take my data"
+        chain_data = node.get_chain_data
+        _from = node_wallet
+        json_message = format_json_message(header=header, receiver=send_to, _from=_from, message=new_message, data=chain_data)
+        node.send_message_to_nodes(json_message)
+
+
+def handle_received_node_data(**data):
+    node = data["node"]
+    message = data["message"]
+    receiver = message["receiver"]
+    my_address = node.wallet_address
+    if my_address == receiver:
+        chain_data = message["data"]
+        node.writeChainData(chain_data)
     pass
 
 
 functions = {node_connected_to_network: write_new_node,
              from_older_node_id: write_old_node,
-             node_request_data: handle_data_receiver
+             node_request_data: handle_data_receiver,
+             node_send_to_concrete_node_data: handle_received_node_data
              }

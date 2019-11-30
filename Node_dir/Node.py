@@ -17,7 +17,6 @@ from tools import functions
 class Node:
     def __init__(self, new_address):
         self.wallet_address = new_address
-        self.id = "NODE" + self.wallet_address
         self.node_chain_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "data" + "\\" + str(
             new_address) + ".txt"
         self.node_info_filename = os.path.dirname(os.path.abspath(__file__)) + "\\" + "nodes" + "\\" + str(
@@ -26,7 +25,7 @@ class Node:
         self.address = '<broadcast>'
         self.port = 1234
         self.socket = self.initSocket()
-        self.log_data = None
+        self.node_data = None
         self.time_start_online = datetime.now().timestamp()
 
     def initSocket(self):
@@ -43,6 +42,19 @@ class Node:
     @property
     def get_address(self):
         return self.wallet_address
+
+    def writeChainData(self, data):
+        try:
+            with open(self.node_chain_filename) as f:
+                f.write(data)
+        except FileNotFoundError:
+            dir_path = os.path.dirname(os.path.realpath(__file__))
+            dir_to_create = dir_path + "\\" + "data"
+            os.makedirs(dir_to_create)
+            file = open(self.node_chain_filename, "w")
+            file.write(data)
+            file.close()
+
 
     def getChainData(self):
         try:
@@ -97,7 +109,6 @@ class Node:
                 # check data if it's sent from this same instance
                 deserealizedJson = pickle.loads(data)
                 message_header = deserealizedJson["header"]
-                message_from = deserealizedJson["_from"]
                 try:
                     call_func = functions[message_header]
                 except KeyError:
@@ -114,8 +125,7 @@ class Node:
                     message = "Hello from older node!"
                     time_online = datetime.now().timestamp() - self.time_start_online
                     # todo send to this function only node information and deserialized json message
-                    json_message = self.format_json_message(header=header, _from=_from, message=message,
-                                                            time_online=time_online)
+                    json_message = tools.format_json_message(header=header, _from=_from, message=message)
                     self.send_message_to_nodes(json_message)
             except socket.timeout:  # happens on timeout, needed to not block on recvfrom
                 pass  # generally, this is not needed, daemon threads end when program ends
@@ -124,7 +134,7 @@ class Node:
         header = tools.node_connected_to_network
         _from = self.wallet_address
         message = "I am online!"
-        json_message = self.format_json_message(header=header, _from=_from, message=message)
+        json_message = tools.format_json_message(header=header, _from=_from, message=message)
         self.send_message_to_nodes(json_message)
         my_file = Path(self.node_chain_filename)
         if not my_file.is_file():
@@ -135,16 +145,10 @@ class Node:
         serialized_message = pickle.dumps(json_message)
         self.socket.sendto(serialized_message, (self.address, self.port))
 
-    def format_json_message(self, **data):
-        new_json_message = {}
-        for key, value in data.items():
-            new_json_message[str(key)] = value
-        return new_json_message
-
     def get_nodes_online(self):
-        self.log_data = self.getNodeData()
-        if self.log_data:
-            return len(self.log_data)
+        self.node_data = self.getNodeData()
+        if self.node_data:
+            return len(self.node_data)
         return 0
 
     # todo import this method from tools
@@ -165,8 +169,6 @@ class Node:
             return None
 
     def ask_for_data(self):
-        # because writing the data about available nodes to the file could not be finished so we need some pause for it
-        time.sleep(1)
         nodes_online = self.get_nodes_online()
         if nodes_online > 0:
             nodes = self.getNodeData()
@@ -179,7 +181,7 @@ class Node:
         header = tools.node_request_data
         _from = self.wallet_address
         message = "Give me a data"
-        json_message = self.format_json_message(header=header, _from=_from, message=message)
+        json_message = tools.format_json_message(header=header, _from=_from, message=message)
         self.send_message_to_nodes(json_message)
 
     def start(self):
@@ -195,12 +197,14 @@ class Node:
         listen_thread = Thread(target=self.thread_listen, daemon=True)
         listen_thread.start()
         self.send_me_online()
+        # because writing the data about available nodes to the file could not be finished so we need some pause for it
+        time.sleep(1)
         self.ask_for_data()
         while True:
             time.sleep(2)
-            self.log_data = self.getNodeData()
+            self.node_data = self.getNodeData()
             print("Node " + self.wallet_address + " is here!")
             print("Nodes online - " + str(self.get_nodes_online()))
             print("List of nodes: ")
-            print(self.log_data)
+            print(self.node_data)
             print("///////////")
