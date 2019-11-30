@@ -68,10 +68,14 @@ def get_node_data(node_log_filename):
         print(traceback.print_exc())
         return None
 
+
 def handle_data_receiver(**data):
+    node = data["node"]
+    json_message = data["deserealizedJson"]
     pass
 
 
-
 functions = {node_connected_to_network: write_new_node,
-             from_older_node_id: write_old_node}
+             from_older_node_id: write_old_node,
+             node_request_data: handle_data_receiver
+             }

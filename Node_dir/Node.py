@@ -105,7 +105,7 @@ class Node:
                     traceback.print_exc()
                 deserealizedJson["from_ip_address"] = from_addr
                 deserealizedJson["port_listened"] = self.port
-                res = call_func(message_from=message_from, wallet_address=self.wallet_address,
+                res = call_func(node=self, message_from=message_from, wallet_address=self.wallet_address,
                                 deserealizedJson=deserealizedJson,
                                 node_chain_filename=self.node_chain_filename,
                                 node_log_filename=self.node_info_filename)
