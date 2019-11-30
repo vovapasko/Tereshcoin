@@ -106,10 +106,7 @@ class Node:
                 deserealizedJson["from_ip_address"] = from_addr
                 deserealizedJson["port_listened"] = self.port
                 # todo send to this function only node information, message_from and deserialized json message
-                res = call_func(node=self, message_from=message_from, wallet_address=self.wallet_address,
-                                deserealizedJson=deserealizedJson,
-                                node_chain_filename=self.node_chain_filename,
-                                node_log_filename=self.node_info_filename)
+                res = call_func(node=self, message=deserealizedJson)
                 # todo think how to remaster this spaghetti code
                 if message_header == tools.node_connected_to_network and self.get_nodes_online() != 0:  # means that older node sees a new node and sends back respond
                     header = tools.from_older_node_id

@@ -1,2 +1,2 @@
-{"header": "NODE_NEW_CONNECTED_MAIN_INFO", "_from": "Petya", "message": "I am online!", "from_ip_address": ["192.168.0.105", 1234], "port_listened": 1234}
-{"header": "NODE_NEW_CONNECTED_MAIN_INFO", "_from": "John", "message": "I am online!", "from_ip_address": ["192.168.0.105", 1234], "port_listened": 1234}
+{"header": "NODE_FROM_OLD_MESSAGE", "_from": "Petya", "message": "Hello from older node!", "time_online": 12.045624017715454, "from_ip_address": ["192.168.0.105", 1234], "port_listened": 1234}
+{"header": "NODE_FROM_OLD_MESSAGE", "_from": "John", "message": "Hello from older node!", "time_online": 16.983147859573364, "from_ip_address": ["192.168.0.105", 1234], "port_listened": 1234}

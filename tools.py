@@ -15,13 +15,16 @@ def get_hash(string):
 
 ## todo make a refactoring of code here
 def write_new_node(**data):
-    if not data['message_from'] == data['wallet_address']:
-        address = data['deserealizedJson']['from_ip_address']
-        _from = data['deserealizedJson']["_from"]
+    node = data["node"]
+    wallet_address = node.wallet_address
+    message = data['message']
+    if not message['_from'] == wallet_address:
+        address = message['from_ip_address']
+        _from = message["_from"]
         print(f'Received data from {address} ip address and {_from} wallet address')
-        with open(data['node_log_filename'], 'a+') as file:
+        with open(node.node_info_filename, 'a+') as file:
             # file.write(f'New data from {address}:\n')
-            message = json.dumps(data['deserealizedJson'])
+            message = json.dumps(message)
             file.write(f'{str(message)}\n')
             file.flush()
             os.fsync(file.fileno())
@@ -39,13 +42,15 @@ def get_all_addresses(data):
 ## todo make a refactoring of code here
 def write_old_node(**data):
     log_data = None
+    node = data["node"]
+    message = data["message"]
     try:
-        log_data = get_node_data(data['node_log_filename'])
+        log_data = get_node_data(node.node_info_filename)
     except FileNotFoundError:
         print(traceback.print_exc())
     if log_data:
         addresses = get_all_addresses(log_data)
-        new_address = data['message_from']
+        new_address = message['_from']
         if new_address not in addresses:
             write_new_node(**data)
     else:  # means that the node get a message for the first node in it's "life"
@@ -72,7 +77,7 @@ def get_node_data(node_log_filename):
 
 def handle_data_receiver(**data):
     node = data["node"]
-    json_message = data["deserealizedJson"]
+    json_message = data["message"]
     pass
 
 
