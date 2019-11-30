@@ -143,12 +143,12 @@ class Node:
         return new_json_message
 
     def get_nodes_online(self):
-        self.log_data = self.getLogData()
+        self.log_data = self.getNodeData()
         if self.log_data:
             return len(self.log_data)
         return 0
 
-    def getLogData(self):
+    def getNodeData(self):
         try:
             file = open(self.node_info_filename, "r")
             data_str = file.read().split("\n")
@@ -169,7 +169,7 @@ class Node:
         time.sleep(1)
         nodes_online = self.get_nodes_online()
         if nodes_online > 0:
-            nodes = self.getLogData()
+            nodes = self.getNodeData()
             self.send_give_data_message(nodes)
         else:
             print("I am alone in this world...")
@@ -179,8 +179,8 @@ class Node:
         header = tools.node_request_data
         _from = self.wallet_address
         message = "Give me a data"
-
-        pass
+        json_message = self.format_json_message(header=header, _from=_from, message=message)
+        self.send_message_to_nodes(json_message)
 
     def start(self):
         try:
@@ -195,10 +195,10 @@ class Node:
         listen_thread = Thread(target=self.thread_listen, daemon=True)
         listen_thread.start()
         self.send_me_online()
-        # self.ask_for_data()
+        self.ask_for_data()
         while True:
             time.sleep(2)
-            self.log_data = self.getLogData()
+            self.log_data = self.getNodeData()
             print("Node " + self.wallet_address + " is here!")
             print("Nodes online - " + str(self.get_nodes_online()))
             print("List of nodes: ")

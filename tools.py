@@ -39,7 +39,7 @@ def get_all_addresses(data):
 def write_old_node(**data):
     log_data = None
     try:
-        log_data = get_log_data(data['node_log_filename'])
+        log_data = get_node_data(data['node_log_filename'])
     except FileNotFoundError:
         print(traceback.print_exc())
     if log_data:
@@ -52,7 +52,7 @@ def write_old_node(**data):
     return False
 
 
-def get_log_data(node_log_filename):
+def get_node_data(node_log_filename):
     try:
         file = open(node_log_filename, "r")
         data_str = file.read().split("\n")
@@ -67,6 +67,10 @@ def get_log_data(node_log_filename):
     except Exception:
         print(traceback.print_exc())
         return None
+
+def handle_data_receiver(**data):
+    pass
+
 
 
 functions = {node_connected_to_network: write_new_node,
