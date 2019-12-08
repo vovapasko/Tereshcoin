@@ -1,0 +1,1 @@
+{"header": "NODE_FROM_OLD_MESSAGE", "_from": "John", "message": "Hello from older node!", "from_ip_address": ["192.168.56.1", 1234], "port_listened": 1234}
