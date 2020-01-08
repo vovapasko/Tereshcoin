@@ -24,7 +24,7 @@ class Node:
         self.chain_data = self.getChainData()
         self.address = '<broadcast>'
         self.port = 1234
-        self.socket = self.initSocket()
+        self.socket, self.receive_socket = self.initSocket()
         self.node_data = None
         self.time_start_online = datetime.now().timestamp()
 
@@ -33,7 +33,11 @@ class Node:
         udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         udpSocket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         udpSocket.bind(('', self.port))
-        return udpSocket
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)  # DGRAM makes this a UDP socket
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        s.bind(('', self.port))
+        return udpSocket, s
 
     @property
     def get_chain_data(self):
@@ -55,7 +59,6 @@ class Node:
             file = open(self.node_chain_filename, "w")
             file.write(data)
             file.close()
-
 
     def getChainData(self):
         try:
