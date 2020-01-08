@@ -45,8 +45,9 @@ class Node:
 
     def writeChainData(self, data):
         try:
-            with open(self.node_chain_filename) as f:
-                f.write(data)
+            with open(self.node_chain_filename, "a") as f:
+                str_data = json.dumps(data)
+                f.write(str_data)
         except FileNotFoundError:
             dir_path = os.path.dirname(os.path.realpath(__file__))
             dir_to_create = dir_path + "\\" + "data"
@@ -102,7 +103,7 @@ class Node:
         return self.get_root(new_hash, proof[1:])
 
     def thread_listen(self):
-        BUFFER_SIZE = 1024
+        BUFFER_SIZE = 10240
         while True:
             try:
                 data, from_addr = self.socket.recvfrom(BUFFER_SIZE)
