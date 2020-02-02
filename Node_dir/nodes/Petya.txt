@@ -1,2 +1,0 @@
-{"header": "NODE_NEW_CONNECTED_MAIN_INFO", "_from": "Vasya", "message": "I am online!", "from_ip_address": ["192.168.0.104", 1234], "port_listened": 1234}
-{"header": "NODE_NEW_CONNECTED_MAIN_INFO", "_from": "John", "message": "I am online!", "from_ip_address": ["192.168.0.104", 1234], "port_listened": 1234}
