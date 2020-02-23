@@ -50,14 +50,13 @@ class Node:
                     money_out += transaction['amount']
         return money_in - money_out
 
-    def checkProof(self, trx_to_check, proof, block_hash):
+    def check_proof(self, trx_to_check, proof, block_hash):
         for block in self.chain_data:
             if block['block_hash'] == block_hash:
-                my_block = block
+                my_block = block     # if the block was found there is no need for loop to go further. Fix it.
         real_root = my_block['merkleRoot']
         root_from_proof = self.get_root(trx_to_check, proof)
         return real_root == root_from_proof
-
 
     def get_root(self, node_hash, proof):
         if len(proof) == 0:

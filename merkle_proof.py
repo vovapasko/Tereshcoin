@@ -8,24 +8,21 @@ with open(credentials.filename) as f:
     chain = json.load(f)
 
 first_transactions = chain[0]['transactions']
-trx_lst = []
-for trans in first_transactions:
-    a = trans['moneyFrom']
-    b = trans['moneyWho']
-    c = trans['when']
-    d = trans['amount']
-    new_Tx = Transaction(trans['moneyFrom'], trans['moneyWho'], trans['when'], trans['amount'])
-    trx_lst.append(new_Tx)
+trx1 = Transaction('A', 'B', 1571866523.0888188, 150)
+trx2 = Transaction('C', 'D', 1571866523.0888188, 150)
+trx3 = Transaction('E', 'F', 1571866523.0888188, 150)
+trx4 = Transaction('G', 'H', 1571866523.0888188, 150)
+trx_lst = [trx1, trx2, trx3]
+
+
 merkle_t = MerkleTree(trx_lst)
 print(merkle_t.getRootHash())
 
-trx_to_proof = Transaction("14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1",
-                           "ec4006a60556d0f521847f487c4e0c57ee1a84982aa64a4fac2837fc71356d51",
-                           1571866523.0888188,
-                           150)
+trx_to_proof = Transaction('E', 'F', 1571866523.0888188, 150)
 trx_hash = trx_to_proof.__hash__()
 proof = merkle_t.proveTransaction(trx_hash)
 
 address = get_hash("Vova")
 nodeV = Node(address)
-nodeV.checkProof(trx_hash, proof, "77d248487a6a13241aa6cfd2ce19154ce245772fd5b3986213be005a9881201e")
+res =nodeV.check_proof(trx_hash, proof, "77d248487a6a13241aa6cfd2ce19154ce245772fd5b3986213be005a9881201e")
+print(res)
