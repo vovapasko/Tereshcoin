@@ -3,6 +3,7 @@ import json
 import credentials
 from Node.Node import Node
 from merkle import get_hash, Transaction, MerkleTree
+from Block import Block
 
 with open(credentials.filename) as f:
     chain = json.load(f)
@@ -23,5 +24,5 @@ proof = merkle_t.getTransactionProof(trx_hash)
 
 address = get_hash("Vova")
 nodeV = Node(address)
-res =nodeV.check_proof(trx_hash, proof, "77d248487a6a13241aa6cfd2ce19154ce245772fd5b3986213be005a9881201e")
+res = nodeV.check_proof(trx_hash, proof, merkle_t.getRootHash())
 print(res)

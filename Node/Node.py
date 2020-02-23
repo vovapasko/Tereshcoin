@@ -50,16 +50,20 @@ class Node:
                     money_out += transaction['amount']
         return money_in - money_out
 
-    def check_proof(self, trx_to_check, proof, block_hash):
-        for block in self.chain_data:
-            if block['block_hash'] == block_hash:
-                my_block = block     # if the block was found there is no need for loop to go further. Fix it.
-        real_root = my_block['merkleRoot']
+    def check_proof(self, trx_to_check, proof, real_merkle_root_hash):
+        '''
+        real_merkle_root_hash - real hash from real block 
+        '''        
+        real_root = real_merkle_root_hash
         root_from_proof = self.get_root(trx_to_check, proof)
         return real_root == root_from_proof
 
     def get_root(self, node_hash, proof):
         if len(proof) == 0:
             return node_hash
-        new_hash = get_hash(node_hash + proof[0])
+        proof_hash_position = proof[0].get('position')
+        proof_hash_value = proof[0].get('value')
+        # next line solves hash commutative problem when hash(a) + hash(b) != hash(b) + hash(a) by
+        # determining the way of addition by the position of hash in initial Merkle tree 
+        new_hash = get_hash(node_hash + proof_hash_value) if proof_hash_position == 'right' else get_hash(proof_hash_value + node_hash)
         return self.get_root(new_hash, proof[1:])

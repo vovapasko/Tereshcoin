@@ -118,20 +118,20 @@ class MerkleTree:
             # todo try to replace the repeating code
             if left_child == searched_hash:
                 new_searched_node = MerkleNode(searched_hash, right_child)
-                proof.append(right_child)   # remaster the data structure here and add the flag of the side of leaf
+                proof.append({'position': 'right', 'value': right_child})   # remaster the data structure here and add the flag of the side of leaf
                 return self.prove(self.root, new_searched_node.my_hash, proof)
             if right_child == searched_hash:
                 new_searched_node = MerkleNode(left_child, searched_hash)
-                proof.append(left_child)
+                proof.append({'position': 'left', 'value': left_child})
                 return self.prove(self.root, new_searched_node.my_hash, proof)
             return  # means that leaf we are looking for is not in this subtree
         if left_child.my_hash == searched_hash:
             new_searched_node = MerkleNode(searched_hash, right_child.my_hash)
-            proof.append(right_child.my_hash)
+            proof.append({'position': 'right', 'value': right_child.my_hash})
             return self.prove(self.root, new_searched_node.my_hash, proof)
         if right_child.my_hash == searched_hash:
             new_searched_node = MerkleNode(left_child.my_hash, searched_hash)
-            proof.append(left_child.my_hash)
+            proof.append({'position': 'left', 'value': left_child.my_hash})
             return self.prove(self.root, new_searched_node.my_hash, proof)
         self.prove(left_child, searched_hash, proof)
         self.prove(right_child, searched_hash, proof)
@@ -143,6 +143,7 @@ class MerkleTree:
         :return: dataset of needed transactions for reproducing Merkle tree and the hash of block if this transaction
         belongs to tree and exists in chain. Otherwise returns empty list.
         """
+        proof = []
         proof = self.prove(self.root, trx_hash, proof)
         return proof
 
