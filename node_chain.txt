@@ -1,0 +1,7 @@
+{
+    "timestamp": 1569515521.3878982,
+    "nonce": 5,
+    "previous_block": "0",
+    "target": "0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+    "merkleRoot": "717157b98b70d26f07d7a5e27aba0351fe92ef29e5ac48ecdd20ea93cf108b89"
+}
