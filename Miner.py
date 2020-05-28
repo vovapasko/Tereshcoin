@@ -48,7 +48,7 @@ def mine(block):
         new_hash = block.__hash__()
         print("Block hash", new_hash)
         print("target - ", int(target, 16))
-        print("Number - ", int(new_hash, 16))
+        print("Block hash int - ", int(new_hash, 16))
         print("Nonce = ", block.nonce)
         print('Is the block hash less than the target?')
         solution_found = lessThanTarget(new_hash, target)
@@ -84,6 +84,7 @@ def start():
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((socket.gethostname(), 1234))
     s.listen(amountNodes)
+    print("Waiting for tasks")
     while True:
         clientNodeSocket, nodeAddress = s.accept()
         print(f"Data from {nodeAddress} has been received.")
@@ -92,6 +93,9 @@ def start():
         trx_list.append(trx)
         print(f"Have {len(trx_list)} transactions. Need {trx_in_block - len(trx_list)} more to start mining")
         if len(trx_list) == trx_in_block:
+            print("//////////////////////")
+            print("Start mining")
+            print("//////////////////////")
             create_new_block(trx_list)
 
 
