@@ -1,8 +1,7 @@
-import datetime
 import time
 
-import Miner
 from Block import Block
+from Miner.Miner import mine
 from merkle import Transaction, get_hash, MerkleTree
 
 '''
@@ -21,5 +20,5 @@ trx_list = [trx1, trx2, trx3]
 tree = MerkleTree(trx_list)
 
 genesis_block = Block("0", tree.getRootHash(), trx_list)
-Miner.mine(genesis_block)
+mine(genesis_block)
 

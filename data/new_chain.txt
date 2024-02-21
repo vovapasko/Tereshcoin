@@ -81,4 +81,32 @@
             "moneyFrom": "14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1"
         }
     ]
+},
+{
+    "timestamp": 1708539544.637654,
+    "nonce": 341,
+    "previous_block": "0",
+    "target": "0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+    "merkleRoot": "01e6739c903089999df621fc77e81b98b7051ee69ab4ca24cb182c9d7c581a14",
+    "block_hash": "c6a6885a92fa3ab6d96d937727c18045c609d17d10dc257511655fd0a4ebefae",
+    "transactions": [
+        {
+            "amount": 150,
+            "when": 1708539544.637634,
+            "moneyWho": "225e2708d54a4e8e0bfe2393dc2c28a32f2b3dd355706afb49363de7ddbf4c58",
+            "moneyFrom": "14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1"
+        },
+        {
+            "amount": 150,
+            "when": 1708539544.6376362,
+            "moneyWho": "150653f51df5e2aa0bda45b6f68ab4fd2c9c5620042baf6124bf5af302780115",
+            "moneyFrom": "14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1"
+        },
+        {
+            "amount": 150,
+            "when": 1708539544.6376362,
+            "moneyWho": "ec4006a60556d0f521847f487c4e0c57ee1a84982aa64a4fac2837fc71356d51",
+            "moneyFrom": "14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b78192fd1"
+        }
+    ]
 }]
