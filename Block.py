@@ -1,6 +1,6 @@
 import time
 
-from merkle import get_hash
+from util import hash_function
 
 
 class Block:
@@ -15,5 +15,9 @@ class Block:
         self.transactions = transactions
 
     def __hash__(self):
-        return get_hash(
-            str(self.previous_block) + str(self.timestamp) + str(self.nonce) + str(self.target) + str(self.merkleRoot))
+        return hash_function(
+            (
+                str(self.timestamp) + str(self.nonce) + str(self.previous_block) +
+                str(self.merkleRoot) + str(self.transactions)
+            ).encode()
+        )
