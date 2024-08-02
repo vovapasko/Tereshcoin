@@ -6,96 +6,36 @@ import random
 from json import JSONEncoder
 
 
-def get_hash(string):
-    return hashlib.sha256(hashlib.sha256(string.encode("utf-8")).hexdigest().encode('utf-8')).hexdigest()
+def generate_hash(input_string: str) -> str:
+    """
+    Generates a SHA-256 hash of the input string.
 
+    Args:
+        input_string (str): The string to be hashed.
 
-class MerkleTree:
-    def __init__(self, transactions):
-        self.transactions = sorted(transactions, key=lambda trx: trx.when)
-        self.nodes = []
-        self.createNodes()
-        self.root = self.getRoot()
+    Returns:
+        str: The SHA-256 hash of the input string.
+    """
 
-    def createNodes(self):
-        if len(self.transactions) == 1:
-            self.nodes.append(MerkleNode(self.transactions[0].__hash__(), self.transactions[0].__hash__()))
-        else:
-            for i in range(0, len(self.transactions), 2):
-                if i % 2 == 0 and i == len(self.transactions) - 1:
-                    self.nodes.append(MerkleNode(self.transactions[i].__hash__(), self.transactions[i].__hash__()))
-                else:
-                    self.nodes.append(MerkleNode(self.transactions[i].__hash__(), self.transactions[i + 1].__hash__()))
+    # Convert the input string to bytes and hash it twice.
+    hashed_bytes = hashlib.sha256(input_string.encode()).digest()
+    hashed_string = hashlib.sha256(hashed_bytes).hexdigest()
 
-    def getRootHash(self):
-        return get_hash(self.root.leftChildHash + self.root.rightChildHash)
+    return hashed_string
 
-    def getRootElement(self, nodes, roots):
-        if len(roots) == 1 and len(nodes) == 0:
-            return roots[0]
-        if len(nodes) == 0:
-            return self.getRootElement(roots, [])
-        if len(nodes) == 1:
-            roots.append(MerkleNode(nodes[0].__hash__(), nodes[0].__hash__()))
-            return self.getRootElement(roots, [])
-        else:
-            roots.append(MerkleNode(nodes[0].__hash__(), nodes[1].__hash__()))
-            new_nodes = nodes[2:]
-            return self.getRootElement(new_nodes, roots)
+class Wallet:
 
-    def getRoot(self):
-        root = self.getRootElement(self.nodes, [])
-        return root
+    def __init__(self, address):
+        self.address = address
 
-    # def printTree(self):
-    #     root = self.getCHildTree(self.root)
-    #
-
-    def getCHildTree(self, root):
-        left = root.getLeftChild()
-        right = root.getRightChild()
-        pass
-
-
-class MerkleNode:
-    def __init__(self, leftChild, rightChild):
-        self.leftChildHash = leftChild
-        self.rightChildHash = rightChild
-
-    def getRoot(self):
-        return get_hash(self.leftChildHash + self.rightChildHash)
-
-    def getLeftChild(self):
-        return self.leftChildHash
-
-    def getRightChild(self):
-        return self.rightChildHash
-
-    def __eq__(self, other):
-        return self.__hash__() == other.__hash__()
-
-    def __hash__(self):
-        return get_hash(self.leftChildHash + self.rightChildHash)
 
 
 class Transaction:
-    def __init__(self, moneyFrom, moneyWho, when, amount):
+    def __init__(self, sender: Wallet, receiver: Wallet, when, amount):
         self.amount = amount
         self.when = when
-        self.moneyWho = moneyWho
-        self.moneyFrom = moneyFrom
-
-    def __eq__(self, other):
-        return get_hash(self.moneyWho + self.moneyFrom + str(self.when) + str(self.amount)) == \
-               get_hash(other.moneyWho + other.moneyFrom + str(other.when) + str(other.amount))
-
-    def __hash__(self):
-        a = self.moneyWho
-        b = self.moneyFrom
-        c = hash(self.when)
-        d = hash(self.amount)
-        shastr = get_hash(a + b + str(c) + str(d))
-        return shastr
+        self.receiver = receiver
+        self.sender = sender
 
 
 class TransactionEncoder(JSONEncoder):
@@ -118,8 +58,3 @@ trx3 = Transaction('14d6f42ada24c3c1a6b839a574fa1dc0c2629011fc732635635e6c6b7819
                    1569761836.1613867,
                    150)
 trx_list = [trx1, trx2, trx3]
-tree = MerkleTree(trx_list)
-root = tree.getRoot()
-left = root.getLeftChild()
-right = root.getRightChild()
-no_child = left.getLeftChild()
