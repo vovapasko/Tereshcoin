@@ -1,7 +1,7 @@
 import json
 from merkly.mtree import MerkleTree
 from json import JSONEncoder
-from util import hash_function
+from src.util import hash_function
 
 
 class Wallet:
