@@ -1,8 +1,8 @@
 
-from src.merkle import Transaction, Wallet
+from common.merkle import Transaction, Wallet
 from merkly.mtree import MerkleTree
 import unittest
-from src.merkle import Transaction, Wallet, MerkleTree
+from common.merkle import Transaction, Wallet, MerkleTree
 
 class MerkleTreeTestCase(unittest.TestCase):
     def setUp(self):

@@ -1,7 +1,7 @@
 import datetime
 import time
 
-import Miner
+import miner.Miner as Miner
 from Block import Block
 from merkle import Transaction, get_hash, MerkleTree
 

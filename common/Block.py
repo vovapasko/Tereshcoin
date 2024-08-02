@@ -1,13 +1,16 @@
 import time
+from typing import List
 
+from common.merkle import Transaction
 from util import hash_function
 
 
 class Block:
-    def __init__(self, previous_block, merkleRoot, transactions):
+    def __init__(self, previous_block_hash: str, merkleRoot: str, transactions: List[Transaction]):
+        
         self.timestamp = time.time()
-        self.nonce = 0
-        self.previous_block = previous_block
+        self._nonce = 0 # private variable
+        self.previous_block = previous_block_hash
         # self.target = '0x00000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
         self.target = '0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
         self.merkleRoot = merkleRoot

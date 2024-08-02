@@ -1,5 +1,5 @@
 
-from src.merkle import Transaction, Wallet
+from common.merkle import Transaction, Wallet
 from merkly.mtree import MerkleTree
 
 def start():
