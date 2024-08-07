@@ -1,5 +1,4 @@
 
-from common.merkle import Transaction, Wallet
 from merkly.mtree import MerkleTree
 import unittest
 from common.merkle import Transaction, Wallet, MerkleTree
@@ -23,3 +22,6 @@ class MerkleTreeTestCase(unittest.TestCase):
         self.assertEqual(self.tree.verify(proof=proof, raw_leaf=self.trx1.__hash__()), True)
         self.assertEqual(self.tree.verify(proof=proof, raw_leaf="trx2.__hash__()"), False)
 
+
+if __name__ == "__main__":
+    unittest.main()

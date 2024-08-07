@@ -6,8 +6,16 @@ from util import hash_function
 
 
 class Block:
-    def __init__(self, previous_block_hash: str, merkleRoot: str, transactions: List[Transaction]):
-        
+    
+    @property
+    def nonce(self):
+        return self._nonce
+
+    @nonce.setter
+    def iterate_nonce(self):
+        self._nonce += 1
+
+    def __init__(self, previous_block_hash: str, merkleRoot: str, transactions: List[Transaction]):    
         self.timestamp = time.time()
         self._nonce = 0 # private variable
         self.previous_block = previous_block_hash

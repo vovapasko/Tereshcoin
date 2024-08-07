@@ -24,7 +24,7 @@ def start():
 
     tree = MerkleTree(trx_list)
     print(tree.raw_leaves)
-
+    print(tree.make_root(tree.leaves))
     proof = tree.proof(trx1.__hash__())
     print(tree.verify(proof=proof, raw_leaf=trx1.__hash__()))
     print(tree.verify(proof=proof, raw_leaf="trx2.__hash__()"))
