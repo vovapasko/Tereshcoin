@@ -16,10 +16,10 @@ class MinerTestCase(unittest.TestCase):
     def test_mine(self):
         miner = Miner(address='miner_address')
         transactions = [
-            Transaction(sender=Wallet('Jake'), receiver=Wallet('Martha'), when=123456, amount=100),
-            Transaction(sender=Wallet('Andrew'), receiver=Wallet('Tristan'), when=123456, amount=200),
-            Transaction(sender=Wallet('Donald'), receiver=Wallet('Joe'), when=123456, amount=300),
-            Transaction(sender=Wallet('Olaf'), receiver=Wallet('Robert'), when=123456, amount=400),
+            Transaction(sender=Wallet('Jake', 'jake_address'), receiver=Wallet('Martha', 'martha_address'), when=123456, amount=100),
+            Transaction(sender=Wallet('Andrew', 'andrew_address'), receiver=Wallet('Tristan', 'tristan_address'), when=123456, amount=200),
+            Transaction(sender=Wallet('Donald', 'donald_address'), receiver=Wallet('Joe', 'joe_address'), when=123456, amount=300),
+            Transaction(sender=Wallet('Olaf', 'olaf_address'), receiver=Wallet('Robert', 'robert_address'), when=123456, amount=400),
             ]
         mined_block = miner.mine(transactions)
         assert mined_block is not None

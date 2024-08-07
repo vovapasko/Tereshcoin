@@ -2,7 +2,7 @@ import time
 from typing import List
 
 from common.merkle import Transaction
-from util import hash_function
+from common.util import hash_function
 
 
 class Block:
@@ -11,7 +11,6 @@ class Block:
     def nonce(self):
         return self._nonce
 
-    @nonce.setter
     def iterate_nonce(self):
         self._nonce += 1
 
@@ -22,8 +21,8 @@ class Block:
         # self.target = '0x00000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
         self.target = '0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
         self.merkleRoot = merkleRoot
-        self.block_hash = self.__hash__()
         self.transactions = transactions
+        self.block_hash = self.__hash__()
 
     def __hash__(self):
         return hash_function(
