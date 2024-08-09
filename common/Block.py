@@ -18,8 +18,8 @@ class Block:
         self.timestamp = time.time()
         self._nonce = 0 # private variable
         self.previous_block = previous_block_hash
-        # self.target = '0x00000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
         self.target = '0x00FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF'
+
         self.merkleRoot = merkleRoot
         self.transactions = transactions
         self.block_hash = self.__hash__()
